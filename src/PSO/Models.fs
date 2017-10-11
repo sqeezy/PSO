@@ -1,5 +1,7 @@
 [<AutoOpen>]
 module Models
+  open System
+  let maxFloat = Double.MaxValue
 
   type Agent<'T> = MailboxProcessor<'T>
 
@@ -26,5 +28,3 @@ module Models
     with
     static member Create agent globalBest =
       {LocalBest=globalBest;GlobalBest=globalBest;Swarm=agent; Running = false}
-
-let maxFloat = Double.MaxValue

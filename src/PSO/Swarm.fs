@@ -8,6 +8,7 @@ let Swarm () =
       agents |> List.map sendNewBestToAgent
 
     let rec loop state =  async{
+
       let! msg = inbox.TryReceive(1)
 
       match msg with
