@@ -19,7 +19,7 @@ let Particle swarm = Agent.Start(fun inbox ->
           return! loop newState
     |None -> 
       if state.Running then
-        let newTest = randomFloat()
+        let newTest = Fitnesse (randomFloat())
         if newTest < state.LocalBest then
           let newState = {state with LocalBest= newTest}
           if newTest < state.GlobalBest then
@@ -29,6 +29,6 @@ let Particle swarm = Agent.Start(fun inbox ->
     return! loop state
   }
 
-  let initialState = (ParticleState.Create swarm maxFloat) 
+  let initialState = (ParticleState.Create swarm (Fitnesse maxFloat))
   loop initialState
 )

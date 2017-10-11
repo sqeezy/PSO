@@ -30,5 +30,5 @@ let Swarm () =
         |None -> return! loop state
     }
 
-    loop {Agents=[];GlobalBest=maxFloat}
+    loop {Agents=[];GlobalBest=Fitnesse maxFloat}
 )

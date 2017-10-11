@@ -5,24 +5,26 @@ module Models
 
   type Agent<'T> = MailboxProcessor<'T>
 
+  type Fitnesse = Fitnesse of float
+
   type ParticleMsg = 
     | Finish
-    | UpdateGlobal of float
+    | UpdateGlobal of Fitnesse
     | Start
 
   type SwarmMsg =
     |Register of Agent<ParticleMsg>
-    |NewGlobalBest of float
+    |NewGlobalBest of Fitnesse
     |Start
 
-  type GlobalState = {Agents : Agent<ParticleMsg> list;GlobalBest : float} with
+  type GlobalState = {Agents : Agent<ParticleMsg> list;GlobalBest : Fitnesse} with
     member this.AddAgent agent = {Agents=agent::this.Agents;GlobalBest=this.GlobalBest}
 
   type ParticleState =
     {
       Swarm : Agent<SwarmMsg>;
-      LocalBest : float;
-      GlobalBest : float;
+      LocalBest : Fitnesse;
+      GlobalBest : Fitnesse;
       Running : bool
     }
     with
