@@ -3,8 +3,8 @@ module Swarm
 let Swarm () =
   Agent.Start(fun inbox -> 
 
-    let sendNewBestToAllAgents (agents:list<Agent<WorkerMsg>>) best =
-      let sendNewBestToAgent agent = (agent:Agent<WorkerMsg>).Post(UpdateGlobal best)
+    let sendNewBestToAllAgents (agents:list<Agent<ParticleMsg>>) best =
+      let sendNewBestToAgent agent = (agent:Agent<ParticleMsg>).Post(UpdateGlobal best)
       agents |> List.map sendNewBestToAgent
 
     let rec loop state = 
@@ -16,7 +16,7 @@ let Swarm () =
               match call with
                 |Register agent -> return! loop (state.AddAgent(agent):GlobalState)
                 |Start -> 
-                  let startAgent (agent : Agent<WorkerMsg>) = agent.Post(WorkerMsg.Start)
+                  let startAgent (agent : Agent<ParticleMsg>) = agent.Post(ParticleMsg.Start)
                   List.map startAgent state.Agents |> ignore
                   return! loop state
                 |NewGlobalBest value -> 

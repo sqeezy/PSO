@@ -3,20 +3,20 @@ module Models
 
   type Agent<'T> = MailboxProcessor<'T>
 
-  type WorkerMsg = 
+  type ParticleMsg = 
     | Finish
     | UpdateGlobal of float
     | Start
 
   type SwarmMsg =
-    |Register of Agent<WorkerMsg>
+    |Register of Agent<ParticleMsg>
     |NewGlobalBest of float
     |Start
 
-  type GlobalState = {Agents : Agent<WorkerMsg> list;GlobalBest : float} with
+  type GlobalState = {Agents : Agent<ParticleMsg> list;GlobalBest : float} with
     member this.AddAgent agent = {Agents=agent::this.Agents;GlobalBest=this.GlobalBest}
 
-  type WorkerState =
+  type ParticleState =
     {
       Swarm : Agent<SwarmMsg>;
       LocalBest : float;

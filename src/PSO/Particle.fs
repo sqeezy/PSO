@@ -1,20 +1,19 @@
-module Worker
+module Particle
 open System
 
 let maxFloat = Double.MaxValue
 let ran = Random 42
 let randomFloat ()=
   float(ran.Next(-10000000,10000000))
-
-let Worker swarm = Agent.Start(fun inbox -> 
-  let rec loop (state:WorkerState) = async{
+let Particle swarm = Agent.Start(fun inbox -> 
+  let rec loop (state:ParticleState) = async{
 
     let! msg = inbox.TryReceive(1)
 
     match msg with
-    |Some (value : WorkerMsg) ->
+    |Some (value : ParticleMsg) ->
       match value with
-        |WorkerMsg.Start -> return! loop {state with Running=true}
+        |ParticleMsg.Start -> return! loop {state with Running=true}
         |Finish -> return ()
         |UpdateGlobal newGlobal -> 
           let newState = {state with GlobalBest=newGlobal}
@@ -31,6 +30,6 @@ let Worker swarm = Agent.Start(fun inbox ->
     return! loop state
     }
 
-  let initialState = (WorkerState.Create swarm maxFloat) 
+  let initialState = (ParticleState.Create swarm maxFloat) 
   loop initialState
 )

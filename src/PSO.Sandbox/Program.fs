@@ -1,15 +1,15 @@
 ﻿open System
 
-open Worker
+open Particle
 open Swarm
 open Models
 
 [<EntryPoint>]
 let main argv = 
     let hub = Swarm()
-    let createWorker () = Worker hub
+    let createParticle () = Particle hub
     let register w = hub.Post(Register w)
-    let createAndRegister = createWorker >> register
+    let createAndRegister = createParticle >> register
     [1..20]
     |> fun _ -> createAndRegister()
     hub.Post(Start)
