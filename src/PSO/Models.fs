@@ -26,3 +26,5 @@ module Models
     with
     static member Create agent globalBest =
       {LocalBest=globalBest;GlobalBest=globalBest;Swarm=agent; Running = false}
+
+let maxFloat = Double.MaxValue

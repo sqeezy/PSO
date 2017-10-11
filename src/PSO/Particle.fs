@@ -1,7 +1,6 @@
 module Particle
 open System
 
-let maxFloat = Double.MaxValue
 let ran = Random 42
 let randomFloat ()=
   float(ran.Next(-10000000,10000000))
@@ -28,7 +27,7 @@ let Particle swarm = Agent.Start(fun inbox ->
           return! loop newState
 
     return! loop state
-    }
+  }
 
   let initialState = (ParticleState.Create swarm maxFloat) 
   loop initialState
