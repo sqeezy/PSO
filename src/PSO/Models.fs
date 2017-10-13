@@ -1,11 +1,19 @@
 [<AutoOpen>]
 module Models
+
   open System
+
   let maxFloat = Double.MaxValue
 
   type Agent<'T> = MailboxProcessor<'T>
 
   type Fitnesse = Fitnesse of float
+
+  type ParameterSet = float list
+
+  type TargetFunction = ParameterSet -> Fitnesse
+
+  type Solution = ParameterSet * Fitnesse
 
   type ParticleMsg = 
     | Finish
