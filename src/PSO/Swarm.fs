@@ -20,7 +20,7 @@ let Swarm problem =
               List.map startAgent state.Agents |> ignore
               return! loop state
             |NewGlobalBest value -> 
-              match value < state.GlobalBest with
+              match isBetter value state.GlobalBest with
                 |true ->
                   sendNewBestToAllAgents state.Agents value |> ignore
                   printfn "New global best %A" value
@@ -31,7 +31,7 @@ let Swarm problem =
     }
 
     let initialSolution =
-      let startParams = [0.0]
+      let startParams = [maxFloat]
       (startParams, problem.Func startParams)
 
     loop {Agents=[];GlobalBest=initialSolution}

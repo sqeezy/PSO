@@ -16,6 +16,11 @@ module Models
   type OptimizationProblem = {Func : TargetFunction}
 
   type Solution = ParameterSet * Fitnesse
+  
+  let isBetter lhs rhs =
+    let (_, lhsFit) = lhs
+    let (_, rhsFit) = rhs
+    lhsFit < rhsFit
 
   type ParticleMsg = 
     | Finish

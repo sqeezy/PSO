@@ -31,9 +31,9 @@ let Particle swarm problem = Agent.Start(fun inbox ->
     |None -> 
       if state.Running then
         let newTest = itterate state
-        if newTest < state.LocalBest then
+        if isBetter newTest state.LocalBest then
           let newState = {state with LocalBest= newTest}
-          if newTest < state.GlobalBest then
+          if isBetter newTest state.GlobalBest then
             state.Swarm.Post(NewGlobalBest newTest)
           return! loop newState
 
