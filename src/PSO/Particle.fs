@@ -1,11 +1,11 @@
 module Particle
 open System
 
-let ran = Random 42
-let randomFloat ()=
-  float(ran.Next(-10000000,10000000))
-let Particle swarm problem = Agent.Start(fun inbox -> 
+let Particle swarm problem (ran:System.Random) = Agent.Start(fun inbox -> 
 
+  let randomFloat ()=
+    float(ran.Next(-10000000,10000000))
+  
   let generateInitialSolution prob : Solution =
     //we need proper init here
     let parameters = [randomFloat()]

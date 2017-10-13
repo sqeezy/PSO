@@ -12,12 +12,18 @@ let Main argv =
       p1*p1
     let problem = {Func=func}
 
+    let random = System.Random()
     let hub = Swarm problem
-    let createParticle () = Particle hub problem
-    let register w = hub.Post(Register w)
+    let createParticle () = Particle hub problem random
+    let register w =
+      hub.Post(Register w)
+      w
     let createAndRegister = createParticle >> register
-    [1..100]
-    |> fun _ -> createAndRegister()
+
+    let agents = [1..10] |> List.map (fun i ->  createAndRegister())
+
+    printfn "%A" agents
+
     hub.Post(Start)
     while true do
         Console.WriteLine "wait"
