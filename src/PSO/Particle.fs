@@ -4,7 +4,18 @@ open System
 let ran = Random 42
 let randomFloat ()=
   float(ran.Next(-10000000,10000000))
-let Particle swarm = Agent.Start(fun inbox -> 
+let Particle swarm problem = Agent.Start(fun inbox -> 
+
+  let generateInitialSolution prob : Solution =
+    //we need proper init here
+    let parameters = [randomFloat()]
+    let fitnesse = prob.Func parameters
+    (parameters,fitnesse)
+
+  let itterate (state:ParticleState) =
+    let input = [randomFloat()]
+    (input, state.Problem.Func input)
+
   let rec loop (state:ParticleState) = async{
 
     let! msg = inbox.TryReceive(1)
@@ -19,7 +30,7 @@ let Particle swarm = Agent.Start(fun inbox ->
           return! loop newState
     |None -> 
       if state.Running then
-        let newTest = Fitnesse (randomFloat())
+        let newTest = itterate state
         if newTest < state.LocalBest then
           let newState = {state with LocalBest= newTest}
           if newTest < state.GlobalBest then
@@ -29,6 +40,6 @@ let Particle swarm = Agent.Start(fun inbox ->
     return! loop state
   }
 
-  let initialState = (ParticleState.Create swarm (Fitnesse maxFloat))
+  let initialState = (ParticleState.Create problem swarm (generateInitialSolution problem))
   loop initialState
 )

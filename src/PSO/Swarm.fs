@@ -1,6 +1,6 @@
 module Swarm
 
-let Swarm () =
+let Swarm problem =
   Agent.Start(fun inbox -> 
 
     let sendNewBestToAllAgents (agents:list<Agent<ParticleMsg>>) best =
@@ -30,5 +30,9 @@ let Swarm () =
         |None -> return! loop state
     }
 
-    loop {Agents=[];GlobalBest=Fitnesse maxFloat}
+    let initialSolution =
+      let startParams = [0.0]
+      (startParams, problem.Func startParams)
+
+    loop {Agents=[];GlobalBest=initialSolution}
 )

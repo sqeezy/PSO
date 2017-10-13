@@ -7,34 +7,42 @@ module Models
 
   type Agent<'T> = MailboxProcessor<'T>
 
-  type Fitnesse = Fitnesse of float
+  type Fitnesse = float
 
   type ParameterSet = float list
 
   type TargetFunction = ParameterSet -> Fitnesse
 
+  type OptimizationProblem = {Func : TargetFunction}
+
   type Solution = ParameterSet * Fitnesse
 
   type ParticleMsg = 
     | Finish
-    | UpdateGlobal of Fitnesse
+    | UpdateGlobal of Solution
     | Start
 
   type SwarmMsg =
     |Register of Agent<ParticleMsg>
-    |NewGlobalBest of Fitnesse
+    |NewGlobalBest of Solution
     |Start
 
-  type GlobalState = {Agents : Agent<ParticleMsg> list;GlobalBest : Fitnesse} with
+  type GlobalState = 
+    {
+      Agents : Agent<ParticleMsg> list;
+      GlobalBest : Solution
+    }
+    with
     member this.AddAgent agent = {Agents=agent::this.Agents;GlobalBest=this.GlobalBest}
 
   type ParticleState =
     {
       Swarm : Agent<SwarmMsg>;
-      LocalBest : Fitnesse;
-      GlobalBest : Fitnesse;
+      Problem : OptimizationProblem;
+      LocalBest : Solution;
+      GlobalBest : Solution;
       Running : bool
     }
     with
-    static member Create agent globalBest =
-      {LocalBest=globalBest;GlobalBest=globalBest;Swarm=agent; Running = false}
+    static member Create problem agent globalBest =
+      {LocalBest=globalBest;GlobalBest=globalBest;Swarm=agent; Running = false; Problem=problem}
