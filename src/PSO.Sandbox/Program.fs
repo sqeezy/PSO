@@ -1,15 +1,15 @@
 ﻿open System
 
 open Particle
-open Swarm
+open PSO
 open Models
 
 [<EntryPoint>]
 let Main argv = 
 
-    // let func (parameters:ParameterSet):Fitnesse = 
-    //   let p1 = parameters.[0] 
-    //   p1*p1
+    let func (parameters:ParameterSet):Fitnesse = 
+      let p1 = Seq.item 0 parameters
+      p1*p1
     // let problem = {Func=func}
 
     // let random = System.Random()

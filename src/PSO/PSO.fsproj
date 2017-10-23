@@ -7,8 +7,8 @@
 
   <ItemGroup>
     <Compile Include="Models.fs" />
-    <Compile Include="Swarm.fs" />
     <Compile Include="Particle.fs" />
+    <Compile Include="Swarm.fs" />
   </ItemGroup>
 
   <ItemGroup>
