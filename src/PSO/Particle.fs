@@ -1,45 +1,40 @@
 module Particle
 open System
 
-let Particle swarm problem (ran:System.Random) = Agent.Start(fun inbox -> 
+let randomBetweenZeroAndOne = random.NextDouble
 
-  let randomFloat ()=
-    float(ran.Next(-10000000,10000000))
+let create (problem : OptimizationProblem) =
+
+  let randomParam () = 
+    let (min, max) = problem.InputRange
+    min + (max-min)*randomBetweenZeroAndOne()
   
-  let generateInitialSolution prob : Solution =
-    //we need proper init here
-    let parameters = [randomFloat()]
-    let fitnesse = prob.Func parameters
-    (parameters,fitnesse)
+  let parameters = 
+    [1..problem.Dimension]
+      |> Seq.map (fun _ -> randomParam())
 
-  let itterate (state:ParticleState) =
-    let input = [randomFloat()]
-    (input, state.Problem.Func input)
+  {Position = parameters;LocalBest=(parameters, problem.Func parameters); Velocity=Array.zeroCreate problem.Dimension}
 
-  let rec loop (state:ParticleState) = async{
+let (--) seq1 seq2 = Seq.map2 (-) seq1 seq2
+let (++) seq1 seq2 = Seq.map2 (+) seq1 seq2
+let (.*) scalar s =
+  let mulByScalar a = a*scalar
+  s |> Seq.map mulByScalar
 
-    let! msg = inbox.TryReceive(1)
+let itterate (particle:Particle , problem:OptimizationProblem, globalBest:Solution) =
 
-    match msg with
-    |Some (value : ParticleMsg) ->
-      match value with
-        |ParticleMsg.Start -> return! loop {state with Running=true}
-        |Finish -> return ()
-        |UpdateGlobal newGlobal -> 
-          let newState = {state with GlobalBest=newGlobal}
-          return! loop newState
-    |None -> 
-      if state.Running then
-        let newTest = itterate state
-        if isBetter newTest state.LocalBest then
-          let newState = {state with LocalBest= newTest}
-          if isBetter newTest state.GlobalBest then
-            state.Swarm.Post(NewGlobalBest newTest)
-          return! loop newState
+  let weightLocal = randomBetweenZeroAndOne()
+  let weightGlobal = randomBetweenZeroAndOne()
+  let (globalBestPos,_) = globalBest
+  let (localBestPos,localBestValue) = particle.LocalBest
+  let pos = particle.Position
 
-    return! loop state
-  }
+  let updatedVelocity = particle.Velocity ++ (weightGlobal .* (globalBestPos--pos)) ++ (weightLocal .* (localBestPos--pos)) 
+  let updatedPosition = pos++updatedVelocity
 
-  let initialState = (ParticleState.Create problem swarm (generateInitialSolution problem))
-  loop initialState
-)
+  let updatedLocalBest =
+    if problem.Func updatedPosition < localBestValue then
+      (updatedPosition,problem.Func updatedPosition)
+    else
+      particle.LocalBest
+  {Position=updatedPosition;LocalBest=updatedLocalBest;Velocity=updatedVelocity}
