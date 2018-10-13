@@ -5,49 +5,34 @@ module Models
 
   let maxFloat = Double.MaxValue
 
-  type Agent<'T> = MailboxProcessor<'T>
+  let random = Random()
 
   type Fitnesse = float
 
-  type ParameterSet = float list
+  type ParameterSet = float seq
 
   type TargetFunction = ParameterSet -> Fitnesse
 
-  type OptimizationProblem = {Func : TargetFunction}
+  type OptimizationProblem = {
+    Func : TargetFunction
+    InputRange : float * float
+    Dimension : int
+  }
 
   type Solution = ParameterSet * Fitnesse
+  let valueFromSolution (solution:Solution) =
+    let (_,fit) = solution
+    fit
+
+  type Particle = {
+    Position : ParameterSet
+    LocalBest : Solution
+    Velocity : float seq
+  }
   
-  let isBetter lhs rhs =
-    let (_, lhsFit) = lhs
-    let (_, rhsFit) = rhs
-    lhsFit < rhsFit
+  type Swarm = {
+    GlobalBest : Solution;
+    Particles : Particle seq
+  }
 
-  type ParticleMsg = 
-    | Finish
-    | UpdateGlobal of Solution
-    | Start
-
-  type SwarmMsg =
-    |Register of Agent<ParticleMsg>
-    |NewGlobalBest of Solution
-    |Start
-
-  type GlobalState = 
-    {
-      Agents : Agent<ParticleMsg> list;
-      GlobalBest : Solution
-    }
-    with
-    member this.AddAgent agent = {Agents=agent::this.Agents;GlobalBest=this.GlobalBest}
-
-  type ParticleState =
-    {
-      Swarm : Agent<SwarmMsg>;
-      Problem : OptimizationProblem;
-      LocalBest : Solution;
-      GlobalBest : Solution;
-      Running : bool
-    }
-    with
-    static member Create problem agent globalBest =
-      {LocalBest=globalBest;GlobalBest=globalBest;Swarm=agent; Running = false; Problem=problem}
+  type Optimizer = OptimizationProblem -> Solution
