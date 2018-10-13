@@ -3,4 +3,4 @@ mono: none
 dotnet: 2.1.402
 dist: trusty
 script:
- - ./build.sh
+ - bash build.sh
