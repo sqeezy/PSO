@@ -1,3 +1,6 @@
-# PSO - [![Build Status](https://travis-ci.org/sqeezy/PSO.svg?branch=master)](https://travis-ci.org/sqeezy/PSO)
-[Particle Swarm Optimizer](https://en.wikipedia.org/wiki/Particle_swarm_optimization)
+# PSO - [Particle Swarm Optimizer](https://en.wikipedia.org/wiki/Particle_swarm_optimization)
+## Build Status
+|Linux|Windows|
+|----|-----|
+|[![Build Status](https://travis-ci.org/sqeezy/PSO.svg?branch=master)](https://travis-ci.org/sqeezy/PSO)|[![Build status](https://ci.appveyor.com/api/projects/status/kq9egkspm5x1q605?svg=true)](https://ci.appveyor.com/project/sqeezy/pso)|
 

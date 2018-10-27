@@ -1,38 +1,20 @@
-module Swarm
+namespace PSO
 
-let Swarm problem =
-  Agent.Start(fun inbox -> 
+open System
+open Particle
 
-    let sendNewBestToAllAgents (agents:list<Agent<ParticleMsg>>) best =
-      let sendNewBestToAgent agent = (agent:Agent<ParticleMsg>).Post(UpdateGlobal best)
-      agents |> List.map sendNewBestToAgent
+module Swarm =
 
-    let rec loop state =  async{
+  //from paper https://hal.archives-ouvertes.fr/file/index/docid/764996/filename/SPSO_descriptions.pdf
+  let swarmSize dimension = 10 + 2 * (Math.Sqrt dimension |> int)
 
-      let! msg = inbox.TryReceive(1)
+  let Swarm particles =
+    let initialBestParticle = particles |> Seq.minBy (fun p -> p.LocalBest |> valueFromSolution)
+    {GlobalBest=initialBestParticle.LocalBest;Particles=particles}
 
-      match msg with
-        |Some call -> 
-          match call with
-            |Register agent -> return! loop (state.AddAgent(agent):GlobalState)
-            |Start -> 
-              let startAgent (agent : Agent<ParticleMsg>) = agent.Post(ParticleMsg.Start)
-              List.map startAgent state.Agents |> ignore
-              return! loop state
-            |NewGlobalBest value -> 
-              match isBetter value state.GlobalBest with
-                |true ->
-                  sendNewBestToAllAgents state.Agents value |> ignore
-                  printfn "New global best %A" value
-                  return! loop {state with GlobalBest=value}
-                |false ->
-                  return! loop state
-        |None -> return! loop state
-    }
-
-    let initialSolution =
-      let startParams = [maxFloat]
-      (startParams, problem.Func startParams)
-
-    loop {Agents=[];GlobalBest=initialSolution}
-)
+  let update swarm proposal : (bool*Swarm)=
+    let oldBest = swarm.GlobalBest
+    if valueFromSolution proposal < valueFromSolution oldBest then
+      (true,{swarm with GlobalBest=proposal})
+    else
+      (false,swarm)
