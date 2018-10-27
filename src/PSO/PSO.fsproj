@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Anton Herzog</Authors>
   </PropertyGroup>
 
   <ItemGroup>
