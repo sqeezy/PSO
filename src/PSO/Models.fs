@@ -20,9 +20,6 @@ module Models
   }
 
   type Solution = ParameterSet * Fitnesse
-  let valueFromSolution (solution:Solution) =
-    let (_,fit) = solution
-    fit
 
   type Particle = {
     Position : ParameterSet
