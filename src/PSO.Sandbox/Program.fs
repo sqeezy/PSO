@@ -7,25 +7,23 @@ open Models
 [<EntryPoint>]
 let Main argv = 
 
-    let func (parameters:ParameterSet):Fitnesse = 
+    let xSquared (parameters:ParameterSet):Fitnesse = 
       let p1 = Seq.item 0 parameters
       p1*p1
-    // let problem = {Func=func}
+    let problem = {
+      Func = xSquared;
+      InputRange = (-5., 5.);
+      Dimension = 1
+    }
+    let particles = [1..10] |> List.map (fun _ -> Particle.create problem)
+    let swarm = Swarm.create particles
 
-    // let random = System.Random()
-    // let hub = Swarm problem
-    // let createParticle () = Particle hub problem random
-    // let register w =
-    //   hub.Post(Register w)
-    //   w
-    // let createAndRegister = createParticle >> register
+    let rec optimizer swarm problem =
 
-    // let agents = [1..10] |> List.map (fun i ->  createAndRegister())
+      let iterParticleOnProblem = problem |> Particle.itterate
 
-    // printfn "%A" agents
+      let iterateSingle particle swarm =   particle |> iterParticleOnProblem swarm.GlobalBest 
 
-    // hub.Post(Start)
-    // while true do
-    //     Console.WriteLine "wait"
-    //     Threading.Thread.Sleep 1000
+      0
+    
     0

@@ -7,7 +7,7 @@ module Swarm =
   //from paper https://hal.archives-ouvertes.fr/file/index/docid/764996/filename/SPSO_descriptions.pdf
   let swarmSize dimension = 10 + 2 * (Math.Sqrt dimension |> int)
 
-  let Swarm particles =
+  let create particles =
     let valueFromSolution solution =
       let (_ , value) = solution
       value
@@ -18,11 +18,11 @@ module Swarm =
       Particles = particles
     }
 
-  let update (swarm:Swarm) (proposal : Solution) : (bool * Swarm)=
+  let update (swarm:Swarm) (proposal : Solution) : Swarm=
     let ( _, oldBest) = swarm.GlobalBest
     let ( _, proposedBest ) = proposal
 
     match proposedBest with
-    | better when better < oldBest -> (true, { swarm with GlobalBest = proposal })
-    | worse  when worse >= oldBest -> (false,swarm)
-    | _                            -> (false, swarm)
+    | better when better < oldBest -> { swarm with GlobalBest = proposal }
+    | worse  when worse >= oldBest -> swarm
+    | _                            -> swarm

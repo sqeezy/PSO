@@ -22,7 +22,7 @@ let (.*) scalar s =
   s |> Seq.map mulByScalar
 
 //parameter order seems wrong - problem should be curried away
-let itterate (particle:Particle) (problem:OptimizationProblem) (globalBest:Solution) =
+let itterate (problem:OptimizationProblem)(globalBest:Solution) (particle:Particle) =
 
   let weightLocal = randomBetweenZeroAndOne()
   let weightGlobal = randomBetweenZeroAndOne()
