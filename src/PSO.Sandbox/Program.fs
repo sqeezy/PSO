@@ -4,6 +4,17 @@ open Particle
 open PSO
 open Models
 
+let optimizer problem : Solution =
+
+  let particles = [1..10] |> List.map (fun _ -> Particle.create problem)
+  let swarm = Swarm.create particles
+
+  let iterParticleOnProblem = problem |> Particle.itterate
+
+  let iterateSingle particle swarm =   particle |> iterParticleOnProblem swarm.GlobalBest 
+
+  swarm.GlobalBest
+
 [<EntryPoint>]
 let Main argv = 
 
@@ -15,15 +26,6 @@ let Main argv =
       InputRange = (-5., 5.);
       Dimension = 1
     }
-    let particles = [1..10] |> List.map (fun _ -> Particle.create problem)
-    let swarm = Swarm.create particles
 
-    let rec optimizer swarm problem =
-
-      let iterParticleOnProblem = problem |> Particle.itterate
-
-      let iterateSingle particle swarm =   particle |> iterParticleOnProblem swarm.GlobalBest 
-
-      0
     
     0
