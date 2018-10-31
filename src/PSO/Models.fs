@@ -9,7 +9,7 @@ module Models
 
   type Fitnesse = float
 
-  type ParameterSet = float seq
+  type ParameterSet = float array
 
   type TargetFunction = ParameterSet -> Fitnesse
 
@@ -24,12 +24,12 @@ module Models
   type Particle = {
     Position : ParameterSet
     LocalBest : Solution
-    Velocity : float seq
+    Velocity : float array
   }
   
   type Swarm = {
     GlobalBest : Solution;
-    Particles : Particle seq
+    Particles : Particle list
   }
 
   type Optimizer = OptimizationProblem -> Solution

@@ -9,16 +9,17 @@ let create (problem : OptimizationProblem) =
     min + (max - min)*randomBetweenZeroAndOne()
   
   let parameters = 
-    [1..problem.Dimension]
+    [1 .. problem.Dimension]
       |> Seq.map (fun _ -> randomParam())
+      |> Seq.toArray
 
   {Position = parameters;LocalBest=(parameters, problem.Func parameters); Velocity=Array.zeroCreate problem.Dimension}
 
-let (--) seq1 seq2 = Seq.map2 (-) seq1 seq2
-let (++) seq1 seq2 = Seq.map2 (+) seq1 seq2
+let (--) seq1 seq2 = Array.map2 (-) seq1 seq2
+let (++) seq1 seq2 = Array.map2 (+) seq1 seq2
 let (.*) scalar s =
   let mulByScalar a = a * scalar
-  s |> Seq.map mulByScalar
+  s |> Array.map mulByScalar
 
 //parameter order seems wrong - problem should be curried away
 let itterate (problem:OptimizationProblem) (globalBest:Solution) (particle:Particle) =
