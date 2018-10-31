@@ -1,17 +1,12 @@
-﻿open System
-
-open Particle
-open PSO
+﻿open PSO
 open Models
 
 let optimizer problem : Solution =
 
-  let particles = [1..10] |> List.map (fun _ -> Particle.create problem)
-  let swarm = Swarm.create particles
-
+  let swarm = Swarm.create problem
   let iterParticleOnProblem = problem |> Particle.itterate
-
-  let iterateSingle particle swarm =   particle |> iterParticleOnProblem swarm.GlobalBest 
+  let iterateSingle particle {GlobalBest = currentBest} = iterParticleOnProblem currentBest particle  
+  let iterateAll (swarm:Swarm) : Swarm = swarm
 
   swarm.GlobalBest
 

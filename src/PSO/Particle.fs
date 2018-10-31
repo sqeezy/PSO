@@ -1,5 +1,4 @@
 module Particle
-open System
 
 let randomBetweenZeroAndOne = random.NextDouble
 
@@ -22,7 +21,7 @@ let (.*) scalar s =
   s |> Seq.map mulByScalar
 
 //parameter order seems wrong - problem should be curried away
-let itterate (problem:OptimizationProblem)(globalBest:Solution) (particle:Particle) =
+let itterate (problem:OptimizationProblem) (globalBest:Solution) (particle:Particle) =
 
   let weightLocal = randomBetweenZeroAndOne()
   let weightGlobal = randomBetweenZeroAndOne()
