@@ -21,6 +21,13 @@ let (.*) scalar s =
   let mulByScalar a = a * scalar
   s |> Array.map mulByScalar
 
+let clampVelocity max (velocity : float array) =
+  let norm = velocity |> Array.sumBy (fun vc -> vc*vc) |> sqrt
+  match norm with
+  | greater when greater > max -> velocity |> Array.map (fun vc -> vc * max / norm)
+  | _                       -> velocity
+
+
 //parameter order seems wrong - problem should be curried away
 let itterate (problem:OptimizationProblem) (globalBest:Solution) (particle:Particle) =
 
