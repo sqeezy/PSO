@@ -1,32 +1,21 @@
 ﻿open PSO
 open Models
-open Particle
+open Logging
 
 let sequentialOptimize problem : Solution =
 
   let swarm = Swarm.create problem
-
-  printfn "Initial Swarm:"
-  printfn "%A" swarm
 
   let iterParticleOnProblem = problem |> Particle.itterate
   let updateSingleParticle particle {GlobalBest = currentBest} = iterParticleOnProblem currentBest particle  
   let updateSingleAndApplyToSwarm swarm particle =
     let updatedSingleParticle = particle |> updateSingleParticle <| swarm
     let updatedSwarm = Swarm.update swarm updatedSingleParticle.LocalBest
-    printfn "----------------------------------------------------------"
-    printfn "----------------------------------------------------------"
-    printfn "global best new: %A" updatedSwarm.GlobalBest
-    printfn "----------------------------------------------------------"
-    // printfn "particles:"
-    // printfn "%A" updatedSwarm.Particles
-    {updatedSwarm with Particles=(updatedSingleParticle::swarm.Particles |> Seq.toList)}
-  let singleIterationOverWholeSwarm ({GlobalBest=globalBest; Particles=particles}) : Swarm = 
-    Seq.fold updateSingleAndApplyToSwarm {GlobalBest = globalBest;Particles=List.empty} particles
+    { updatedSwarm with Particles = (updatedSingleParticle::swarm.Particles) }
+  let singleIterationOverWholeSwarm ({GlobalBest = globalBest; Particles = particles}) : Swarm = 
+    Seq.fold updateSingleAndApplyToSwarm {GlobalBest = globalBest;Particles = List.empty} particles
   let dummyFolder swarm i = 
-    printfn "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
-    printfn "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
-    printfn "iteration %A" i
+    log "" (sprintf "%A" swarm.Particles)
     singleIterationOverWholeSwarm swarm
   let swarmAfter10000 = Seq.fold dummyFolder swarm [1 .. 1000]
   swarmAfter10000.GlobalBest
