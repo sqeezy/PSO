@@ -1,4 +1,5 @@
 ﻿open Models
+open SequentialOptimizer
 
 
 [<EntryPoint>]
@@ -17,8 +18,10 @@ let Main argv =
       MaxVelocity=0.1;
       Dimension = 1
     }
-
-    let solution = SequentialOptimizer.create problem
+    
+    let config = {MaxIterations=1000}
+    
+    let solution = SequentialOptimizer.create problem config
 
     printfn "%A" solution
     
