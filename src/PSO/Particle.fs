@@ -42,7 +42,8 @@ let itterate (problem:OptimizationProblem) (globalBest:Solution) (particle:Parti
 
   let updatedVelocity = particle.Velocity 
                         ++ (weightGlobal .* (globalBestPos -- pos))
-                        ++ (weightLocal  .* (localBestPos  -- pos)) 
+                        ++ (weightLocal  .* (localBestPos  -- pos))
+                        |> clampVelocity problem.MaxVelocity
 
   let updatedPosition = pos ++ updatedVelocity
 

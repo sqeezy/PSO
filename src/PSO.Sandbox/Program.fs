@@ -33,6 +33,7 @@ let Main argv =
     let problem = {
       Func = xSquared;
       InputRange = (-5., 5.);
+      MaxVelocity=0.1;
       Dimension = 1
     }
 

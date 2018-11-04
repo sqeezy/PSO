@@ -14,6 +14,7 @@ type TargetFunction = ParameterSet -> Fitnesse
 type OptimizationProblem = {
   Func : TargetFunction
   InputRange : float * float
+  MaxVelocity: float
   Dimension : int
 }
 
