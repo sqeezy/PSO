@@ -1,5 +1,6 @@
 ﻿open Models
 open SequentialOptimizer
+open Logging
 
 
 [<EntryPoint>]
@@ -21,7 +22,7 @@ let Main argv =
     
     let config = {MaxIterations=1000}
     
-    let solution = SequentialOptimizer.create problem config
+    let solution = SequentialOptimizer.create problem config log
 
     printfn "%A" solution
     

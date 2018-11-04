@@ -7,7 +7,7 @@ open Models
     MaxIterations : int
   }
 
-  let create problem config : Solution =
+  let create problem config (log: string -> string -> unit): Solution =
 
     let iterParticleOnProblem = problem |> Particle.itterate
     
@@ -22,10 +22,17 @@ open Models
       Seq.fold updateSingleAndApplyToSwarm {GlobalBest = globalBest;Particles = List.empty} particles
       
     let dummyFolder swarm i = 
-      singleIterationOverWholeSwarm swarm
+      let updatedSwarm = singleIterationOverWholeSwarm swarm
+      
+      let avgVelocity = updatedSwarm.Particles |> List.averageBy (fun p -> Array.average p.Velocity)
+      log "average Velocity: " (sprintf "%A" avgVelocity)
+      
+      updatedSwarm
       
     let swarm = Swarm.create problem
     
     let swarmAfter10000 = Seq.fold dummyFolder swarm [1 .. config.MaxIterations]
+    
+    log "final Positions" (sprintf "%A" swarmAfter10000.Particles)
     
     swarmAfter10000.GlobalBest
