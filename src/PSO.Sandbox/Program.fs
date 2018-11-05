@@ -1,50 +1,63 @@
-﻿open PSO
-open Models
-open Particle
+﻿open Models
+open SequentialOptimizer
 open Logging
 
-let sequentialOptimize problem : Solution =
+let oneDimPolynoma =
+  let xSquared (parameters:ParameterSet):Fitnesse = 
+    let x = Seq.item 0 parameters
+    (x*x*x - 6.*x*x + 4.*x + 12.)
 
-  let swarm = Swarm.create problem
+  let sum (parameters:ParameterSet):Fitnesse = 
+    Seq.sum parameters
 
-  log "" (sprintf "Initial Swarm:")
-  log "" (sprintf "%A" swarm)
+  let problem = {
+    Func = xSquared;
+    InputRange = (-10., 10.);
+    MaxVelocity=0.1;
+    Dimension = 1
+  }
+  problem
 
-  let iterParticleOnProblem = problem |> Particle.itterate
-  let updateSingleParticle particle {GlobalBest = currentBest} = iterParticleOnProblem currentBest particle  
-  let updateSingleAndApplyToSwarm swarm particle =
-    let updatedSingleParticle = particle |> updateSingleParticle <| swarm
-    let updatedSwarm = Swarm.update swarm updatedSingleParticle.LocalBest
-    {updatedSwarm with Particles=(updatedSingleParticle::swarm.Particles |> Seq.toList)}
-  let singleIterationOverWholeSwarm ({GlobalBest=globalBest; Particles=particles}) : Swarm = 
-    let updatedSwarm = Seq.fold updateSingleAndApplyToSwarm {GlobalBest = globalBest;Particles=List.empty} particles
-    log "" (sprintf "Mid Velocity %A" (List.averageBy (fun p -> p.Velocity |> Array.average) updatedSwarm.Particles))
-    log "" ("CurrentBest "+ updatedSwarm.GlobalBest.ToString())
-    updatedSwarm
+let xSquaredYSquaredProblem =
+  let xSquaredAndYSquared (parameters:ParameterSet):Fitnesse = 
+    let p1 = Seq.item 0 parameters
+    let p2 = Seq.item 0 parameters
+    p1*p1+p2*p2
 
-  let dummyFolder swarm (i:int) = 
-    log "" ("iteration "+ i.ToString())
-    singleIterationOverWholeSwarm swarm
-  let swarmAfter10000 = Seq.fold dummyFolder swarm [1 .. 1000]
-  swarmAfter10000.GlobalBest
+  let sum (parameters:ParameterSet):Fitnesse = 
+    Seq.sum parameters
+
+  let problem = {
+    Func = xSquaredAndYSquared;
+    InputRange = (-5., 5.);
+    MaxVelocity=0.1;
+    Dimension = 2
+  }
+  problem
+
+
+let xSquaredProblem =
+  let xSquared (parameters:ParameterSet):Fitnesse = 
+    let p1 = Seq.item 0 parameters
+    p1*p1
+
+  let sum (parameters:ParameterSet):Fitnesse = 
+    Seq.sum parameters
+
+  let problem = {
+    Func = xSquared;
+    InputRange = (0., 5.);
+    MaxVelocity=0.1;
+    Dimension = 1
+  }
+  problem
 
 [<EntryPoint>]
 let Main argv = 
-
-    let xSquared (parameters:ParameterSet):Fitnesse = 
-      let p1 = Seq.item 0 parameters
-      p1*p1
-
-    let sum (parameters:ParameterSet):Fitnesse = 
-      Seq.sum parameters
-
-    let problem = {
-      Func = xSquared;
-      InputRange = (-5., 5.);
-      Dimension = 1
-    }
-
-    let solution = sequentialOptimize problem
+    
+    let config = {MaxIterations=1000}
+    
+    let solution = SequentialOptimizer.create oneDimPolynoma config log
 
     printfn "%A" solution
     

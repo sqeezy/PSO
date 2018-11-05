@@ -1,18 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Authors>Anton Herzog</Authors>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Include="Models.fs" />
     <Compile Include="Particle.fs" />
     <Compile Include="Swarm.fs" />
+    <Compile Include="SequentialOptimizer.fs" />
   </ItemGroup>
-
-  <ItemGroup>
-  </ItemGroup>
-
 </Project>
