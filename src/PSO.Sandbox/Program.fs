@@ -5,6 +5,7 @@ open Logging
 let oneDimPolynoma =
   let xSquared (parameters:ParameterSet):Fitnesse = 
     let x = Seq.item 0 parameters
+    // f(x) = x³ - 6x² + 4X + 12
     (x*x*x - 6.*x*x + 4.*x + 12.)
 
   let sum (parameters:ParameterSet):Fitnesse = 
@@ -12,7 +13,7 @@ let oneDimPolynoma =
 
   let problem = {
     Func = xSquared;
-    InputRange = (-10., 10.);
+    InputRange = (-1., 10.);
     MaxVelocity=0.1;
     Dimension = 1
   }
