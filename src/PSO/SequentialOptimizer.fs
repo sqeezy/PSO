@@ -2,12 +2,16 @@ module SequentialOptimizer
 
 open PSO
 open Models
+open System
 
   type Config = {
     MaxIterations : int
   }
 
   let create problem config (log: string -> string -> unit): Solution =
+    let logLabeled tag msg = log (sprintf "%s | %s" problem.Description tag) msg 
+
+    let startTime = DateTime.Now
 
     let iterParticleOnProblem = problem |> Particle.itterate
     
@@ -21,18 +25,23 @@ open Models
     let singleIterationOverWholeSwarm ({GlobalBest = globalBest; Particles = particles}) : Swarm = 
       Seq.fold updateSingleAndApplyToSwarm {GlobalBest = globalBest;Particles = List.empty} particles
       
-    let dummyFolder swarm i = 
+    let trivialFold swarm i = 
       let updatedSwarm = singleIterationOverWholeSwarm swarm
       
       let avgVelocity = updatedSwarm.Particles |> List.averageBy (fun p -> Array.average p.Velocity)
-      log "average Velocity: " (sprintf "%A" avgVelocity)
+      logLabeled (sprintf "average Velocity (%d)" i) (sprintf "%A" avgVelocity)
       
       updatedSwarm
       
     let swarm = Swarm.create problem
     
-    let swarmAfter10000 = Seq.fold dummyFolder swarm [1 .. config.MaxIterations]
+    let swarmAfterMaxIterations = Seq.fold trivialFold swarm [1 .. config.MaxIterations]
     
-    log "final Positions" (sprintf "%A" swarmAfter10000.Particles)
+    let endTime = DateTime.Now
+    let duration = (endTime - startTime).TotalSeconds
+
+
+    logLabeled (sprintf "duration for %d iterations" config.MaxIterations) (sprintf "%A" duration)
+    logLabeled "final Positions" (sprintf "%A" swarmAfterMaxIterations.Particles)
     
-    swarmAfter10000.GlobalBest
+    swarmAfterMaxIterations.GlobalBest

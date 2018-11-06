@@ -12,6 +12,7 @@ type ParameterSet = float array
 type TargetFunction = ParameterSet -> Fitnesse
 
 type OptimizationProblem = {
+  Description : string
   Func : TargetFunction
   InputRange : float * float
   MaxVelocity: float
