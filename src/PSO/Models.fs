@@ -3,7 +3,7 @@ module Models
 
 open System
 
-let random = Random()
+let random = Random(12345)
 
 type Fitnesse = float
 
