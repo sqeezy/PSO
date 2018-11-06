@@ -33,7 +33,6 @@ let private limitPosition (min,max) (pos : float array) =
     | _                            -> c
   pos |> Array.map limitSingleCoordinate
 
-//parameter order seems wrong - problem should be curried away
 let itterate (problem:OptimizationProblem) (globalBest:Solution) (particle:Particle) =
 
   let weightLocal = randomBetweenZeroAndOne()
