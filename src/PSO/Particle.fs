@@ -1,27 +1,22 @@
 module Particle
 
-let randomBetweenZeroAndOne = random.NextDouble
-
+let private randomBetweenZeroAndOne = random.NextDouble
+let private randomParam problem () = 
+  let (min, max) = problem.InputRange
+  min + (max - min)*randomBetweenZeroAndOne()
+let private createParameters problem = 
+  [1 .. problem.Dimension]
+    |> Seq.map (fun _ -> randomParam(problem)())
+    |> Seq.toArray
 let create (problem : OptimizationProblem) =
+  let startPosition = createParameters problem
+  {Position = startPosition;LocalBest=(startPosition, problem.Func startPosition); Velocity=Array.zeroCreate problem.Dimension}
 
-  let randomParam () = 
-    let (min, max) = problem.InputRange
-    min + (max - min)*randomBetweenZeroAndOne()
-  
-  let parameters = 
-    [1 .. problem.Dimension]
-      |> Seq.map (fun _ -> randomParam())
-      |> Seq.toArray
+let (--) v1 v2 = Array.map2 (-) v1 v2
+let (++) v1 v2 = Array.map2 (+) v1 v2
+let (.*) scalar v = v |> Array.map (fun vCoordinate -> scalar * vCoordinate)
 
-  {Position = parameters;LocalBest=(parameters, problem.Func parameters); Velocity=Array.zeroCreate problem.Dimension}
-
-let (--) seq1 seq2 = Array.map2 (-) seq1 seq2
-let (++) seq1 seq2 = Array.map2 (+) seq1 seq2
-let (.*) scalar s =
-  let mulByScalar a = a * scalar
-  s |> Array.map mulByScalar
-
-let limitVelocity max (velocity : float array) =
+let private limitVelocity max (velocity : float array) =
   let norm v = v |> Array.sumBy (fun vc -> vc*vc) |> sqrt
 
   let veloLength = norm velocity
@@ -30,7 +25,7 @@ let limitVelocity max (velocity : float array) =
   | greater when greater > max -> velocity |>  ((.*) <| max/veloLength)
   | _                          -> velocity
 
-let limitPosition (min,max) (pos : float array) =
+let private limitPosition (min,max) (pos : float array) =
   let limitSingleCoordinate c = 
     match c with
     | underMin when underMin < min -> min
