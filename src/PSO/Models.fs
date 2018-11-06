@@ -4,6 +4,7 @@ module Models
 open System
 
 let random = Random(12345)
+let randomBetweenZeroAndOne = random.NextDouble
 
 type Fitnesse = float
 

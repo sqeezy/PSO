@@ -1,6 +1,5 @@
 module Particle
 
-let private randomBetweenZeroAndOne = random.NextDouble
 let private randomParam problem () = 
   let (min, max) = problem.InputRange
   min + (max - min)*randomBetweenZeroAndOne()
@@ -33,28 +32,31 @@ let private limitPosition (min,max) (pos : float array) =
     | _                            -> c
   pos |> Array.map limitSingleCoordinate
 
-let itterate (problem:OptimizationProblem) (globalBest:Solution) (particle:Particle) =
+
+let itterate problem (globalBestPos,_) particle =
 
   let weightLocal = randomBetweenZeroAndOne()
   let weightGlobal = randomBetweenZeroAndOne()
-  let (globalBestPos, _) = globalBest
-  let (localBestPos,localBestValue) = particle.LocalBest
-  let pos = particle.Position
+  
+  let (localBestPos, localBestValue) = particle.LocalBest
+  let currentPosition = particle.Position
 
   let updatedVelocity = particle.Velocity 
-                        ++ (weightGlobal .* (globalBestPos -- pos))
-                        ++ (weightLocal  .* (localBestPos  -- pos))
+                        ++ (weightGlobal .* (globalBestPos -- currentPosition ))
+                        ++ (weightLocal  .* (localBestPos  -- currentPosition ))
                         |> limitVelocity problem.MaxVelocity
 
-  let updatedPosition = pos 
+  let updatedPosition = currentPosition  
                         ++ updatedVelocity
                         |> limitPosition problem.InputRange
 
+  let newCurrentValue = problem.Func updatedPosition
   let updatedLocalBest =
-    if problem.Func updatedPosition < localBestValue then
-      (updatedPosition, problem.Func updatedPosition)
+    if  newCurrentValue < localBestValue then
+      (updatedPosition, newCurrentValue)
     else
       particle.LocalBest
+      
   {
     Position  = updatedPosition;
     LocalBest = updatedLocalBest;
