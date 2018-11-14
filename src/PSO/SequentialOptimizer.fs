@@ -28,7 +28,7 @@ open System
     let trivialFold swarm i = 
       let updatedSwarm = singleIterationOverWholeSwarm swarm
       
-      let avgVelocity = updatedSwarm.Particles |> List.averageBy (fun p -> Array.average (p.Velocity |> Array.map abs))
+      let avgVelocity = updatedSwarm.Particles |> List.averageBy (fun p -> (Array.averageBy abs p.Velocity))
       logLabeled (sprintf "average Velocity (%d)" i) (sprintf "%A" avgVelocity)
       
       updatedSwarm
