@@ -8,7 +8,7 @@ open System
     MaxIterations : int
   }
 
-  let create problem config (log: string -> string -> unit): Solution =
+  let solve problem config (log: Log): Solution =
     let logLabeled tag msg = log (sprintf "%s | %s" problem.Description tag) msg 
 
     let startTime = DateTime.Now
@@ -25,7 +25,7 @@ open System
     let singleIterationOverWholeSwarm ({GlobalBest = globalBest; Particles = particles}) : Swarm = 
       Seq.fold updateSingleAndApplyToSwarm {GlobalBest = globalBest;Particles = List.empty} particles
       
-    let trivialFold swarm i = 
+    let itterationWithIndex swarm i = 
       let updatedSwarm = singleIterationOverWholeSwarm swarm
       
       let avgVelocity = updatedSwarm.Particles |> List.averageBy (fun p -> (Array.averageBy abs p.Velocity))
@@ -35,7 +35,7 @@ open System
       
     let swarm = Swarm.create problem
     
-    let swarmAfterMaxIterations = Seq.fold trivialFold swarm [1 .. config.MaxIterations]
+    let swarmAfterMaxIterations = Seq.fold itterationWithIndex swarm [1 .. config.MaxIterations]
     
     let endTime = DateTime.Now
     let duration = (endTime - startTime).TotalSeconds

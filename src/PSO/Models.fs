@@ -33,4 +33,6 @@ type Swarm = {
   Particles : Particle list
 }
 
+type Log = string -> string -> unit
+
 type Optimizer = OptimizationProblem -> Solution

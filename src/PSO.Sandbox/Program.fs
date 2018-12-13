@@ -55,7 +55,7 @@ let xSquaredYSquaredZSquaredProblem =
 
 let testProblem problem =
     let config = {MaxIterations=1000}
-    let solution = SequentialOptimizer.create problem config log
+    let solution = solve problem config log
     solution |> ignore
 
 [<EntryPoint>]
