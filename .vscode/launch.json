@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/src/PSO.Sandbox/bin/Debug/netcoreapp2.0/PSO.Sandbox.dll",
+            "program": "${workspaceRoot}/src/PSO.Sandbox/bin/Debug/netcoreapp2.1/PSO.Sandbox.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
             "stopAtEntry": false,
