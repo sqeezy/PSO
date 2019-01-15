@@ -4,13 +4,15 @@ pool:
 variables:
   buildConfiguration: 'Release'
 
-steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'build'
-- script: dotnet publish --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
-  displayName: 'publish'
+jobs:
+- job: BuildAndPuplish
+  steps:
+  - script: dotnet build --configuration $(buildConfiguration)
+    displayName: 'build'
+  - script: dotnet publish --project ./src/PSO/PSO.fsproj --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
+    displayName: 'publish'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    artifactName: CI-Binaries
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: CI-Binaries
