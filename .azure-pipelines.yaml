@@ -9,7 +9,7 @@ jobs:
   steps:
   - script: dotnet build --configuration $(buildConfiguration)
     displayName: 'build'
-  - script: dotnet publish --project ./src/PSO/PSO.fsproj --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
+  - script: dotnet publish ./src/PSO/PSO.fsproj --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
     displayName: 'publish'
 
   - task: PublishBuildArtifacts@1
