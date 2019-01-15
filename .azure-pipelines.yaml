@@ -1,11 +1,11 @@
-pool:
-  vmImage: 'Ubuntu 16.04'
 
 variables:
   buildConfiguration: 'Release'
 
 jobs:
 - job: BuildAndPuplish
+  pool:
+    vmImage: 'Ubuntu 16.04'
   steps:
   - script: dotnet build --configuration $(buildConfiguration)
     displayName: 'build'
