@@ -23,7 +23,7 @@ open System
       { updatedSwarm with Particles = (updatedSingleParticle::swarm.Particles) }
     
     let singleIterationOverWholeSwarm ({GlobalBest = globalBest; Particles = particles}) : Swarm = 
-      Seq.fold updateSingleAndApplyToSwarm {GlobalBest = globalBest;Particles = List.empty} particles
+      ({GlobalBest = globalBest; Particles = List.empty}, particles) ||> Seq.fold  updateSingleAndApplyToSwarm
       
     let itterationWithIndex swarm i = 
       let updatedSwarm = singleIterationOverWholeSwarm swarm
