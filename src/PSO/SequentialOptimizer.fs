@@ -33,9 +33,9 @@ open System
       
       updatedSwarm
       
-    let swarm = Swarm.create problem
+    let initialSwarm = Swarm.create problem
     
-    let swarmAfterMaxIterations = Seq.fold itterationWithIndex swarm [1 .. config.MaxIterations]
+    let swarmAfterMaxIterations = (initialSwarm, [1 .. config.MaxIterations]) ||> Seq.fold itterationWithIndex 
     
     let endTime = DateTime.Now
     let duration = (endTime - startTime).TotalSeconds
