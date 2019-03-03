@@ -23,7 +23,7 @@ open System
       { updatedSwarm with Particles = (updatedSingleParticle::swarm.Particles) }
     
     let singleIterationOverWholeSwarm ({GlobalBest = globalBest; Particles = particles}) : Swarm = 
-      Seq.fold updateSingleAndApplyToSwarm {GlobalBest = globalBest;Particles = List.empty} particles
+      ({GlobalBest = globalBest; Particles = List.empty}, particles) ||> Seq.fold  updateSingleAndApplyToSwarm
       
     let itterationWithIndex swarm i = 
       let updatedSwarm = singleIterationOverWholeSwarm swarm
@@ -33,9 +33,9 @@ open System
       
       updatedSwarm
       
-    let swarm = Swarm.create problem
+    let initialSwarm = Swarm.create problem
     
-    let swarmAfterMaxIterations = Seq.fold itterationWithIndex swarm [1 .. config.MaxIterations]
+    let swarmAfterMaxIterations = (initialSwarm, [1 .. config.MaxIterations]) ||> Seq.fold itterationWithIndex 
     
     let endTime = DateTime.Now
     let duration = (endTime - startTime).TotalSeconds
