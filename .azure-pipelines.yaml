@@ -16,4 +16,4 @@ jobs:
   pool:
     vmImage: windows-2019
   steps:
-    - powershell:  ./build.ps1 -Target Publish-Nuget
+    - powershell: ./build.ps1 -Target Publish-NuGet
