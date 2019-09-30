@@ -1,16 +1,26 @@
-
-variables:
-  buildConfiguration: 'Release'
+pr:
+  - master
 
 jobs:
-- job: BuildAndPuplish
-  pool:
-    vmImage: 'Ubuntu 16.04'
-  steps:
-  - script: dotnet build ./src/PSO/PSO.fsproj --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
-    displayName: 'build'
 
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      artifactName: CI-Binaries
+- job: Windows
+  pool:
+    vmImage: windows-2019
+  steps:
+  - powershell: ./build.ps1 -Target Build
+
+- job: Linux
+  pool:
+    vmImage: ubuntu-16.04
+  steps:
+  - script: ./build.sh
+
+- job: Delivery
+  dependsOn:
+  - Windows
+  - Linux
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  pool:
+    vmImage: windows-2019
+  steps:
+    - powershell:  ./build.ps1 -Target Publish-Nuget
