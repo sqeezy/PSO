@@ -22,29 +22,35 @@ Task("NugetRestore")
 Task("Publish-NuGet")
   .IsDependentOn("Build")
   .Does(() =>
-{
-  // Resolve the API key.
-  var apiKey = EnvironmentVariable("NUGET_API_KEY");
-  if(string.IsNullOrEmpty(apiKey)) {
-    throw new InvalidOperationException("Could not resolve NuGet API key.");
-  }
+ {
+     var apiKey = EnvironmentVariable("NUGET_API_KEY");
+     var apiUrl = EnvironmentVariable("NUGET_API_URL");
+     bool apiKeyPresent = string.IsNullOrEmpty(apiKey);
+     bool apiUrlPresent = string.IsNullOrEmpty(apiUrl);
 
-  // Resolve the API url.
-  var apiUrl = EnvironmentVariable("NUGET_API_URL");
-  if(string.IsNullOrEmpty(apiUrl)) {
-    throw new InvalidOperationException("Could not resolve NuGet API url.");
-  }
+     Information($"Key: {apiKeyPresent} | Url: {apiUrlPresent}");
 
-  var packagePath = GetFiles("./src/PSO/bin/Release/PSO.*.nupkg")
-                      .Single()
-                      .FullPath;
-  Information($"Publish {packagePath}");
-  // Push the package.
-  NuGetPush(packagePath, new NuGetPushSettings {
-    ApiKey = apiKey,
-    Source = apiUrl
-  });
-});
+     if (apiKeyPresent)
+     {
+         throw new InvalidOperationException("Could not resolve NuGet API key.");
+     }
+
+     if (apiUrlPresent)
+     {
+         throw new InvalidOperationException("Could not resolve NuGet API url.");
+     }
+
+     var packagePath = GetFiles((string)"./src/PSO/bin/Release/PSO.*.nupkg")
+                        .Single()
+                        .FullPath;
+     Information((string)$"Publish {packagePath}");
+     // Push the package.
+     NuGetPush((FilePath)packagePath, (NuGetPushSettings)new NuGetPushSettings
+     {
+         ApiKey = apiKey,
+         Source = apiUrl
+     });
+ });
 
 Task("Clean")
   .Does(()=>
