@@ -6,6 +6,8 @@
     <Authors>Anton Herzog</Authors>
     <Description>Logic to perform Particle Swarm Optimizer tasks.</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/sqeezy/PSO</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sqeezy/PSO</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Models.fs" />
