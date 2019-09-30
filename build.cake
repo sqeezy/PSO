@@ -50,6 +50,7 @@ Task("Clean")
   .Does(()=>
   {
      DotNetCoreClean("./PSO.sln");
+     DeleteFiles("**/*.nupkg");
   });
 
 RunTarget(target);
