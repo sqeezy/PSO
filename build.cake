@@ -21,7 +21,7 @@ Task("Build")
     .IsDependentOn("Restore")
     .Does(()=>
     {
-        MSBuild("./PSO.sln");
+        DotNetCoreBuild("./PSO.sln");
     });
 
 Task("Clean")
