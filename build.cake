@@ -40,10 +40,10 @@ Task("Publish-NuGet")
                       .FullPath;
   Information($"Publish {packagePath}");
   // Push the package.
-//   NuGetPush(packagePath, new NuGetPushSettings {
-//     ApiKey = apiKey,
-//     Source = apiUrl
-//   });
+  NuGetPush(packagePath, new NuGetPushSettings {
+    ApiKey = apiKey,
+    Source = apiUrl
+  });
 });
 
 Task("Clean")
