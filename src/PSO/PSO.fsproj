@@ -1,7 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Anton Herzog</Authors>
+    <Description>Logic to perform Particle Swarm Optimizer tasks.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/sqeezy/PSO</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sqeezy/PSO</RepositoryUrl>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Models.fs" />
