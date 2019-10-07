@@ -1,4 +1,7 @@
 # PSO - [Particle Swarm Optimizer](https://en.wikipedia.org/wiki/Particle_swarm_optimization)
+
+![Nuget](https://img.shields.io/nuget/dt/PSO)
+
 ## Build Status
 |Linux|Windows|
 |----|-----|
