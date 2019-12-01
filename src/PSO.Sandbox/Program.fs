@@ -1,5 +1,5 @@
-﻿open Models
-open SequentialOptimizer
+﻿open PSO.Models
+open PSO.SequentialOptimizer
 open Logging
 
 let oneDimPolynoma =
