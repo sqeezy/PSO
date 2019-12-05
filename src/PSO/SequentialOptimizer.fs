@@ -1,8 +1,9 @@
-module SequentialOptimizer
+namespace PSO
 
-open PSO
-open Models
-open System
+module SequentialOptimizer =
+
+  open PSO
+  open System
 
   type Config = {
     MaxIterations : int
