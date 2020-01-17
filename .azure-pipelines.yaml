@@ -17,3 +17,9 @@ jobs:
     vmImage: windows-2019
   steps:
   - powershell: ./build.ps1 -Target Publish-Nuget
+  - task: NuGetCommand@2
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'internal'
+      publishVstsFeed: 'b945e56a-1d37-4ffd-8aa1-d726c3b8e38d/3a7a4889-34c3-49d1-9d2f-3c57e909436c'
