@@ -1,6 +1,6 @@
 # PSO - [Particle Swarm Optimizer](https://en.wikipedia.org/wiki/Particle_swarm_optimization)
 
-![Nuget](https://img.shields.io/nuget/dt/PSO)
+![Nuget](https://img.shields.io/nuget/v/pso?style=flat-square)
 
 ## Build Status
 | AppVeyor                                                                                                                             | AZ Pipelines                                                                                                                                                                                   |
