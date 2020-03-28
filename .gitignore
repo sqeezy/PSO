@@ -455,3 +455,6 @@ Scripts/
 
 tools/
 **/symbolCache.db
+
+.fake
+.ionide
